@@ -3,6 +3,6 @@ import { Container } from 'semantic-ui-react';
 
 export default styled(Container)`
     &&& {
-        width: 400px;
+        width: 700px;
     }
 `;
