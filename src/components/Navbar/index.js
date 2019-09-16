@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -24,36 +24,29 @@ const GlobalTopPadding = createGlobalStyle`
     }
 `;
 
-function Navbar({ user, push }) {
-    const [activeItem, setActiveItem] = useState('');
-
-    const handleItemClick = (e, { name }) => {
-        setActiveItem(name);
-        push(`/${name}`);
-    };
+function Navbar({ user, pathname, push }) {
+    const pushRoute = (e, { name }) => push(name);
 
     return (
         <>
             <GlobalTopPadding />
             <NavMenu pointing secondary fixed="top">
-                <NavLogoWrapper
-                    onClick={() => handleItemClick(null, { name: '' })}
-                >
+                <NavLogoWrapper onClick={() => pushRoute(null, { name: '/' })}>
                     <NavLogo src={logo} />
                 </NavLogoWrapper>
                 <PaddedItem
                     component={Menu.Item}
-                    name=""
-                    active={activeItem === ''}
+                    name="/"
+                    active={pathname === '/'}
                     content="Home"
-                    onClick={handleItemClick}
+                    onClick={pushRoute}
                 />
                 <PaddedItem
                     component={Menu.Item}
-                    name="domains"
-                    active={activeItem === 'domains'}
+                    name="/domains"
+                    active={pathname === '/domains'}
                     content="Browse Domains"
-                    onClick={handleItemClick}
+                    onClick={pushRoute}
                 />
                 <NavSearch />
                 <Menu.Menu position="right">
@@ -61,17 +54,17 @@ function Navbar({ user, push }) {
                         <>
                             <PaddedItem
                                 component={Menu.Item}
-                                name="log-in"
-                                active={activeItem === 'log-in'}
+                                name="/log-in"
+                                active={pathname === '/log-in'}
                                 content="Log In"
-                                onClick={handleItemClick}
+                                onClick={pushRoute}
                             />
                             <PaddedItem
                                 component={Menu.Item}
-                                name="sign-up"
-                                active={activeItem === 'sign-up'}
+                                name="/sign-up"
+                                active={pathname === '/sign-up'}
                                 content="Sign Up"
-                                onClick={handleItemClick}
+                                onClick={pushRoute}
                             />
                         </>
                     )}
@@ -79,10 +72,10 @@ function Navbar({ user, push }) {
                         <>
                             <PaddedItem
                                 component={Menu.Item}
-                                name="my-comments"
-                                active={activeItem === 'my-comments'}
+                                name="/my-comments"
+                                active={pathname === '/my-comments'}
                                 content="My Comments"
-                                onClick={handleItemClick}
+                                onClick={pushRoute}
                             />
                             <PaddedItem
                                 item
@@ -101,6 +94,8 @@ function Navbar({ user, push }) {
                                     <Dropdown.Item
                                         icon="sign-out"
                                         text="Log Out"
+                                        name="/log-out"
+                                        onClick={pushRoute}
                                     />
                                 </Dropdown.Menu>
                             </PaddedItem>
@@ -113,7 +108,8 @@ function Navbar({ user, push }) {
 }
 
 const mapStateToProps = state => ({
-    user: state.user.user
+    user: state.user.user,
+    pathname: state.router.location.pathname
 });
 
 export default connect(
