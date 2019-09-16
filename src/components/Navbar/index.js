@@ -24,7 +24,7 @@ const GlobalTopPadding = createGlobalStyle`
     }
 `;
 
-function Navbar({ push }) {
+function Navbar({ user, push }) {
     const [activeItem, setActiveItem] = useState('');
 
     const handleItemClick = (e, { name }) => {
@@ -57,44 +57,66 @@ function Navbar({ push }) {
                 />
                 <NavSearch />
                 <Menu.Menu position="right">
-                    <PaddedItem
-                        component={Menu.Item}
-                        name="signin"
-                        active={activeItem === 'signin'}
-                        content="Sign In"
-                        onClick={handleItemClick}
-                    />
-                    <PaddedItem
-                        component={Menu.Item}
-                        name="signup"
-                        active={activeItem === 'signup'}
-                        content="Sign Up"
-                        onClick={handleItemClick}
-                    />
-                    <PaddedItem
-                        component={Menu.Item}
-                        name="mycomments"
-                        active={activeItem === 'mycomments'}
-                        content="My Comments"
-                        onClick={handleItemClick}
-                    />
-                    <PaddedItem item text="Account" component={Dropdown}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item icon="user" text="My Profile" />
-                            <Dropdown.Item
-                                icon="settings"
-                                text="User Settings"
+                    {!user && (
+                        <>
+                            <PaddedItem
+                                component={Menu.Item}
+                                name="log-in"
+                                active={activeItem === 'log-in'}
+                                content="Log In"
+                                onClick={handleItemClick}
                             />
-                            <Dropdown.Item icon="sign-out" text="Log Out" />
-                        </Dropdown.Menu>
-                    </PaddedItem>
+                            <PaddedItem
+                                component={Menu.Item}
+                                name="sign-up"
+                                active={activeItem === 'sign-up'}
+                                content="Sign Up"
+                                onClick={handleItemClick}
+                            />
+                        </>
+                    )}
+                    {user && (
+                        <>
+                            <PaddedItem
+                                component={Menu.Item}
+                                name="my-comments"
+                                active={activeItem === 'my-comments'}
+                                content="My Comments"
+                                onClick={handleItemClick}
+                            />
+                            <PaddedItem
+                                item
+                                text="Account"
+                                component={Dropdown}
+                            >
+                                <Dropdown.Menu>
+                                    <Dropdown.Item
+                                        icon="user"
+                                        text="My Profile"
+                                    />
+                                    <Dropdown.Item
+                                        icon="settings"
+                                        text="User Settings"
+                                    />
+                                    <Dropdown.Item
+                                        icon="sign-out"
+                                        text="Log Out"
+                                    />
+                                </Dropdown.Menu>
+                            </PaddedItem>
+                        </>
+                    )}
                 </Menu.Menu>
             </NavMenu>
         </>
     );
 }
 
+const mapStateToProps = state => ({
+    user: state.user.user
+});
+
 export default connect(
-    null,
+    mapStateToProps,
     { push }
 )(Navbar);
