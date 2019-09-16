@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { logout } from '../actions/userActions';
+import { logOut } from '../actions/userActions';
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL
@@ -12,7 +12,7 @@ export const initAxios = ({ dispatch }) => {
         },
         error => {
             if (error.response.data.msg === 'Token expired') {
-                dispatch(logout());
+                dispatch(logOut());
             }
 
             return Promise.reject(error);
