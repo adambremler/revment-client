@@ -3,6 +3,6 @@ import { CardContent } from 'semantic-ui-react';
 
 export default styled(CardContent)`
     &&& {
-        padding: 90px 110px 100px 0;
+        padding: ${({ topPadding }) => topPadding} 110px 0 0;
     }
 `;

@@ -22,7 +22,7 @@ export const signUp = user => async dispatch => {
     } catch (e) {
         dispatch(
             signUpFailure(
-                e.response ? e.response.data.msg : 'Could not sign up'
+                e.response ? e.response.data.error : 'Could not sign up'
             )
         );
     }
@@ -45,26 +45,28 @@ const signUpFailure = error => ({
     payload: { error }
 });
 
-export const login = user => async dispatch => {
-    dispatch(loginRequest());
+export const logIn = user => async dispatch => {
+    dispatch(logInRequest());
 
     try {
         const { data } = await axios.post('/users/log-in', { ...user });
 
-        dispatch(loginSuccess(data.token, data.user));
+        dispatch(logInSuccess(data.token, data.user));
         dispatch(push(AFTER_LOG_IN_PATH));
     } catch (e) {
         dispatch(
-            loginFailure(e.response ? e.response.data.msg : 'Could not log in')
+            logInFailure(
+                e.response ? e.response.data.error : 'Could not log in'
+            )
         );
     }
 };
 
-const loginRequest = () => ({
+const logInRequest = () => ({
     type: LOG_IN_REQUEST
 });
 
-const loginSuccess = (token, user) => ({
+const logInSuccess = (token, user) => ({
     type: LOG_IN_SUCCESS,
     payload: {
         token,
@@ -72,7 +74,7 @@ const loginSuccess = (token, user) => ({
     }
 });
 
-const loginFailure = error => ({
+const logInFailure = error => ({
     type: LOG_IN_FAILURE,
     payload: { error }
 });

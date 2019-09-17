@@ -1,6 +1,29 @@
 import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { Icon, Input, Button, Form as SemanticForm } from 'semantic-ui-react';
+import * as Yup from 'yup';
+import {
+    Icon,
+    Input,
+    Button,
+    Form as SemanticForm,
+    Message
+} from 'semantic-ui-react';
+import AuthFieldError from './styled/AuthFieldError';
+
+const SignUpSchema = Yup.object().shape({
+    email: Yup.string()
+        .email('Invalid email')
+        .min(3, 'Email must be between 3 and 40 characters')
+        .max(40, 'Email must be between 3 and 40 characters')
+        .required('Enter an email address'),
+    username: Yup.string()
+        .min(3, 'Username must be between 3 and 20 characters')
+        .max(20, 'Username must be between 3 and 20 characters')
+        .required('Enter a username'),
+    password: Yup.string()
+        .min(8, 'Password must be at least 8 characters long')
+        .required('Enter a password')
+});
 
 export default function SignUpForm({ signUp, isLoading, error }) {
     return (
@@ -10,12 +33,13 @@ export default function SignUpForm({ signUp, isLoading, error }) {
                 username: '',
                 password: ''
             }}
+            validationSchema={SignUpSchema}
             onSubmit={(values, actions) => {
                 signUp(values);
             }}
             render={({ errors, status, touched }) => (
                 <Form>
-                    <SemanticForm.Field>
+                    <SemanticForm.Field error={errors.email}>
                         <label>Email</label>
                         <Field
                             name="email"
@@ -25,7 +49,6 @@ export default function SignUpForm({ signUp, isLoading, error }) {
                                     iconPosition="left"
                                     placeholder="Email"
                                     disabled={isLoading}
-                                    type="email"
                                 >
                                     <Icon name="at" />
                                     <input />
@@ -33,8 +56,8 @@ export default function SignUpForm({ signUp, isLoading, error }) {
                             )}
                         />
                     </SemanticForm.Field>
-                    <ErrorMessage name="email" component="div" />
-                    <SemanticForm.Field>
+                    <ErrorMessage name="email" component={AuthFieldError} />
+                    <SemanticForm.Field error={errors.username}>
                         <label>Username</label>
                         <Field
                             name="username"
@@ -51,8 +74,8 @@ export default function SignUpForm({ signUp, isLoading, error }) {
                             )}
                         />
                     </SemanticForm.Field>
-                    <ErrorMessage name="username" component="div" />
-                    <SemanticForm.Field>
+                    <ErrorMessage name="username" component={AuthFieldError} />
+                    <SemanticForm.Field error={errors.password}>
                         <label>Password</label>
                         <Field
                             name="password"
@@ -70,8 +93,8 @@ export default function SignUpForm({ signUp, isLoading, error }) {
                             )}
                         />
                     </SemanticForm.Field>
-                    <ErrorMessage name="password" component="div" />
-                    {status && status.msg && <div>{status.msg}</div>}
+                    <ErrorMessage name="password" component={AuthFieldError} />
+                    {error && <Message negative>{error}</Message>}
                     <Button
                         icon
                         labelPosition="right"
@@ -80,7 +103,7 @@ export default function SignUpForm({ signUp, isLoading, error }) {
                         disabled={isLoading}
                     >
                         <Icon name="user plus" />
-                        Sign up
+                        Sign Up
                     </Button>
                 </Form>
             )}

@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { signUp } from '../../actions/userActions';
+import { Link } from 'react-router-dom';
 import { Card, Header, Grid } from 'semantic-ui-react';
 import AuthContainer from './styled/AuthContainer';
 import AuthCardContent from './styled/AuthCardContent';
 import SignUpForm from './SignUpForm';
 import SideImage from './styled/SideImage';
-import SignUpImg from './img/signup-sidebar.jpg';
+import SignUpImg from './img/sign-up-sidebar.jpg';
 
 function SignUp({ signUp, isLoading, error }) {
     return (
@@ -17,7 +18,7 @@ function SignUp({ signUp, isLoading, error }) {
                         <SideImage src={SignUpImg} />
                     </Grid.Column>
                     <Grid.Column width={12}>
-                        <AuthCardContent>
+                        <AuthCardContent topPadding={error ? '55px' : '90px'}>
                             <div className="ui form">
                                 <Header as="h1">
                                     <Header.Content>
@@ -34,6 +35,10 @@ function SignUp({ signUp, isLoading, error }) {
                                     isLoading={isLoading}
                                     error={error}
                                 />
+                                <p>
+                                    Already have an account?{' '}
+                                    <Link to="/log-in">Log in</Link>
+                                </p>
                             </div>
                         </AuthCardContent>
                     </Grid.Column>
