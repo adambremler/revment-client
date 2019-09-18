@@ -6,7 +6,8 @@ import {
     Input,
     Button,
     Form as SemanticForm,
-    Message
+    Message,
+    Grid
 } from 'semantic-ui-react';
 import AuthFieldError from './styled/AuthFieldError';
 
@@ -66,16 +67,36 @@ export default function LogInForm({ logIn, isLoading, error }) {
                     </SemanticForm.Field>
                     <ErrorMessage name="password" component={AuthFieldError} />
                     {error && <Message negative>{error}</Message>}
-                    <Button
-                        icon
-                        labelPosition="right"
-                        primary
-                        type="submit"
-                        disabled={isLoading}
-                    >
-                        <Icon name="sign in" />
-                        Log In
-                    </Button>
+                    <Grid columns={1}>
+                        <Grid.Column only="mobile">
+                            <Button
+                                fluid
+                                size="large"
+                                loading={isLoading}
+                                icon
+                                labelPosition="right"
+                                primary
+                                type="submit"
+                                disabled={isLoading}
+                            >
+                                <Icon name="sign in" />
+                                Log In
+                            </Button>
+                        </Grid.Column>
+                        <Grid.Column only="computer tablet">
+                            <Button
+                                loading={isLoading}
+                                icon
+                                labelPosition="right"
+                                primary
+                                type="submit"
+                                disabled={isLoading}
+                            >
+                                <Icon name="sign in" />
+                                Log In
+                            </Button>
+                        </Grid.Column>
+                    </Grid>
                 </Form>
             )}
         />

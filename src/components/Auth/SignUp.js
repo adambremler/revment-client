@@ -7,6 +7,7 @@ import AuthContainer from './styled/AuthContainer';
 import AuthCardContent from './styled/AuthCardContent';
 import SignUpForm from './SignUpForm';
 import SideImage from './styled/SideImage';
+import TopImage from './styled/TopImage';
 import SignUpImg from './img/sign-up-sidebar.jpg';
 
 function SignUp({ signUp, isLoading, error }) {
@@ -14,10 +15,13 @@ function SignUp({ signUp, isLoading, error }) {
         <AuthContainer>
             <Card fluid raised>
                 <Grid columns={2}>
-                    <Grid.Column width={4}>
+                    <Grid.Column width={16} only="mobile">
+                        <TopImage src={SignUpImg} />
+                    </Grid.Column>
+                    <Grid.Column width={4} only="computer tablet">
                         <SideImage src={SignUpImg} />
                     </Grid.Column>
-                    <Grid.Column width={12}>
+                    <Grid.Column computer={12} tablet={12} mobile={16}>
                         <AuthCardContent topPadding={error ? '55px' : '90px'}>
                             <div className="ui form">
                                 <Header as="h1">

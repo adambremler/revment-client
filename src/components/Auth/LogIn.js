@@ -7,6 +7,7 @@ import AuthContainer from './styled/AuthContainer';
 import AuthCardContent from './styled/AuthCardContent';
 import LogInForm from './LogInForm';
 import SideImage from './styled/SideImage';
+import TopImage from './styled/TopImage';
 import LogInImg from './img/log-in-sidebar.jpg';
 
 function LogIn({ logIn, isLoading, error }) {
@@ -14,10 +15,13 @@ function LogIn({ logIn, isLoading, error }) {
         <AuthContainer>
             <Card fluid raised>
                 <Grid columns={2}>
-                    <Grid.Column width={4}>
+                    <Grid.Column width={16} only="mobile">
+                        <TopImage src={LogInImg} />
+                    </Grid.Column>
+                    <Grid.Column width={4} only="computer tablet">
                         <SideImage src={LogInImg} />
                     </Grid.Column>
-                    <Grid.Column width={12}>
+                    <Grid.Column computer={12} tablet={12} mobile={16}>
                         <AuthCardContent topPadding={error ? '125px' : '140px'}>
                             <div className="ui form">
                                 <Header as="h1">
