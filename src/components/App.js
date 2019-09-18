@@ -3,6 +3,9 @@ import { Switch, Route } from 'react-router-dom';
 import AppStyle from './AppStyle';
 import Home from './Home';
 import Navbar from './Navbar';
+import LogIn from './Auth/LogIn';
+import SignUp from './Auth/SignUp';
+import LogOut from './LogOut';
 
 export default function App() {
     return (
@@ -11,6 +14,9 @@ export default function App() {
             <Navbar />
             <Switch>
                 <Route exact path="/" component={Home} />
+                <Route exact path="/log-in" component={LogIn} />
+                <Route exact path="/sign-up" component={SignUp} />
+                <Route exact path="/log-out" component={LogOut} />
             </Switch>
         </>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import styled, { createGlobalStyle } from 'styled-components';
@@ -24,77 +24,95 @@ const GlobalTopPadding = createGlobalStyle`
     }
 `;
 
-function Navbar({ push }) {
-    const [activeItem, setActiveItem] = useState('');
-
-    const handleItemClick = (e, { name }) => {
-        setActiveItem(name);
-        push(`/${name}`);
-    };
+function Navbar({ user, pathname, push }) {
+    const pushRoute = (e, { name }) => push(name);
 
     return (
         <>
             <GlobalTopPadding />
             <NavMenu pointing secondary fixed="top">
-                <NavLogoWrapper
-                    onClick={() => handleItemClick(null, { name: '' })}
-                >
+                <NavLogoWrapper onClick={() => pushRoute(null, { name: '/' })}>
                     <NavLogo src={logo} />
                 </NavLogoWrapper>
                 <PaddedItem
                     component={Menu.Item}
-                    name=""
-                    active={activeItem === ''}
+                    name="/"
+                    active={pathname === '/'}
                     content="Home"
-                    onClick={handleItemClick}
+                    onClick={pushRoute}
                 />
                 <PaddedItem
                     component={Menu.Item}
-                    name="domains"
-                    active={activeItem === 'domains'}
+                    name="/domains"
+                    active={pathname === '/domains'}
                     content="Browse Domains"
-                    onClick={handleItemClick}
+                    onClick={pushRoute}
                 />
                 <NavSearch />
                 <Menu.Menu position="right">
-                    <PaddedItem
-                        component={Menu.Item}
-                        name="signin"
-                        active={activeItem === 'signin'}
-                        content="Sign In"
-                        onClick={handleItemClick}
-                    />
-                    <PaddedItem
-                        component={Menu.Item}
-                        name="signup"
-                        active={activeItem === 'signup'}
-                        content="Sign Up"
-                        onClick={handleItemClick}
-                    />
-                    <PaddedItem
-                        component={Menu.Item}
-                        name="mycomments"
-                        active={activeItem === 'mycomments'}
-                        content="My Comments"
-                        onClick={handleItemClick}
-                    />
-                    <PaddedItem item text="Account" component={Dropdown}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item icon="user" text="My Profile" />
-                            <Dropdown.Item
-                                icon="settings"
-                                text="User Settings"
+                    {!user && (
+                        <>
+                            <PaddedItem
+                                component={Menu.Item}
+                                name="/log-in"
+                                active={pathname === '/log-in'}
+                                content="Log In"
+                                onClick={pushRoute}
                             />
-                            <Dropdown.Item icon="sign-out" text="Log Out" />
-                        </Dropdown.Menu>
-                    </PaddedItem>
+                            <PaddedItem
+                                component={Menu.Item}
+                                name="/sign-up"
+                                active={pathname === '/sign-up'}
+                                content="Sign Up"
+                                onClick={pushRoute}
+                            />
+                        </>
+                    )}
+                    {user && (
+                        <>
+                            <PaddedItem
+                                component={Menu.Item}
+                                name="/my-comments"
+                                active={pathname === '/my-comments'}
+                                content="My Comments"
+                                onClick={pushRoute}
+                            />
+                            <PaddedItem
+                                item
+                                text="Account"
+                                component={Dropdown}
+                            >
+                                <Dropdown.Menu>
+                                    <Dropdown.Item
+                                        icon="user"
+                                        text="My Profile"
+                                    />
+                                    <Dropdown.Item
+                                        icon="settings"
+                                        text="User Settings"
+                                    />
+                                    <Dropdown.Item
+                                        icon="sign-out"
+                                        text="Log Out"
+                                        name="/log-out"
+                                        onClick={pushRoute}
+                                    />
+                                </Dropdown.Menu>
+                            </PaddedItem>
+                        </>
+                    )}
                 </Menu.Menu>
             </NavMenu>
         </>
     );
 }
 
+const mapStateToProps = state => ({
+    user: state.user.user,
+    pathname: state.router.location.pathname
+});
+
 export default connect(
-    null,
+    mapStateToProps,
     { push }
 )(Navbar);

@@ -1,2 +1,2 @@
-export const AFTER_LOGIN_PATH = '/';
-export const AFTER_LOGOUT_PATH = '/login';
+export const AFTER_LOG_IN_PATH = '/';
+export const AFTER_LOG_OUT_PATH = '/';
