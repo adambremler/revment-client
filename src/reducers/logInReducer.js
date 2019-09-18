@@ -1,7 +1,8 @@
 import {
     LOG_IN_REQUEST,
     LOG_IN_SUCCESS,
-    LOG_IN_FAILURE
+    LOG_IN_FAILURE,
+    LOG_OUT
 } from '../constants/actionTypes';
 
 const initialState = {
@@ -28,6 +29,8 @@ export default function(state = initialState, action) {
                 error: action.payload.error,
                 isLoading: false
             };
+        case LOG_OUT:
+            return initialState;
         default:
             return state;
     }
