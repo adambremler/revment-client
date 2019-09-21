@@ -11,7 +11,10 @@ export const initAxios = ({ dispatch }) => {
             return response;
         },
         error => {
-            if (error.response.data.msg === 'Token expired') {
+            if (
+                error.response &&
+                error.response.data.error === 'Token expired'
+            ) {
                 dispatch(logOut());
             }
 
