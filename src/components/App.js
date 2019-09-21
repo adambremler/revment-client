@@ -6,6 +6,8 @@ import Navbar from './Navbar';
 import LogIn from './Auth/LogIn';
 import SignUp from './Auth/SignUp';
 import LogOut from './LogOut';
+import URLComponent from './URL';
+import URLGetter from './URL/URLGetter';
 
 export default function App() {
     return (
@@ -17,6 +19,8 @@ export default function App() {
                 <Route exact path="/log-in" component={LogIn} />
                 <Route exact path="/sign-up" component={SignUp} />
                 <Route exact path="/log-out" component={LogOut} />
+                <Route exact path="/urls" component={URLGetter} />
+                <Route exact path="/urls/:id" component={URLComponent} />
             </Switch>
         </>
     );
