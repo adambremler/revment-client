@@ -1,59 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 import { Search } from 'semantic-ui-react';
-import { debounce, escapeRegExp, filter, times } from 'lodash';
-import faker from 'faker';
+import { search } from '../../actions/searchActions';
 
 import NavSearchWrapper from './styled/NavSearchWrapper';
+import NavSearchResult from './NavSearchResult';
+import { push } from 'connected-react-router';
 
-const initialState = { isLoading: false, results: [], value: '' };
+function NavSearch({ results, isLoading, search, push }) {
+    const [value, setValue] = useState('');
+    const searchEl = useRef(null);
 
-const source = times(5, () => ({
-    title: faker.company.companyName(),
-    description: faker.company.catchPhrase(),
-    image: faker.internet.avatar(),
-    price: faker.finance.amount(0, 100, 2, '$')
-}));
-
-export default function NavSearch() {
-    const [isLoading, setIsLoading] = useState(initialState.isLoading);
-    const [results, setResults] = useState(initialState.results);
-    const [value, setValue] = useState(initialState.value);
-
-    const handleResultSelect = (e, { result }) => setValue(result.title);
+    const handleResultSelect = (e, { result }) => {
+        setValue('');
+        ReactDOM.findDOMNode(searchEl.current)
+            .querySelector('input')
+            .blur();
+        push(`/urls/${result.id}`);
+    };
 
     const handleSearchChange = (e, { value }) => {
-        setIsLoading(true);
         setValue(value);
 
-        setTimeout(() => {
-            if (value.length < 1) {
-                setIsLoading(initialState.isLoading);
-                setResults(initialState.results);
-                setValue(initialState.value);
-                return;
-            }
-
-            const re = new RegExp(escapeRegExp(value), 'i');
-            const isMatch = result => re.test(result.title);
-
-            setIsLoading(false);
-            setResults(filter(source, isMatch));
-        }, 300);
+        if (value.length > 0) {
+            search(value);
+        }
     };
 
     return (
         <NavSearchWrapper>
             <Search
+                ref={searchEl}
                 placeholder="Search revment"
                 input={{ iconPosition: 'left' }}
                 loading={isLoading}
                 onResultSelect={handleResultSelect}
-                onSearchChange={debounce(handleSearchChange, 500, {
-                    leading: true
-                })}
-                results={results}
+                onSearchChange={handleSearchChange}
+                results={
+                    results
+                        ? results.urls.map(u => ({
+                              ...u,
+                              key: u.id
+                          }))
+                        : []
+                }
+                resultRenderer={NavSearchResult}
                 value={value}
             />
         </NavSearchWrapper>
     );
 }
+
+const mapStateToProps = state => ({
+    results: state.search.results,
+    isLoading: state.search.isLoading
+});
+
+const mapDispatchToProps = dispatch => ({
+    search: query => dispatch(search(query)),
+    push: path => dispatch(push(path))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(NavSearch);

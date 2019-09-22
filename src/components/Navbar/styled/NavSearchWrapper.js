@@ -15,8 +15,11 @@ export default styled.div`
     }
 
     .input,
-    .results,
-    .search {
-        width: 100%;
+    .results {
+        width: 100% !important;
+    }
+
+    .results {
+        max-width: 600px;
     }
 `;

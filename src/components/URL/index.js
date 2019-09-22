@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getURLByID } from '../../actions/urlActions';
 
 function URLComponent({ url, getURLByID, match }) {
-    if (!url) {
-        getURLByID(match.params.id);
-    }
+    useEffect(() => {
+        if (!url || url.id !== match.params.id) {
+            getURLByID(match.params.id);
+        }
+    }, [match]);
 
     return (
         <div>
