@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import user from '../reducers/userReducer';
-import signUp from '../reducers/signUpReducer';
-import logIn from '../reducers/logInReducer';
-import url from '../reducers/urlReducer';
+import user from './userReducer';
+import signUp from './signUpReducer';
+import logIn from './logInReducer';
+import url from './urlReducer';
+import search from './searchReducer';
 
 const rootReducer = history =>
     combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = history =>
         user,
         signUp,
         logIn,
-        url
+        url,
+        search
     });
 
 export default rootReducer;
