@@ -7,8 +7,11 @@ import { Loader } from 'semantic-ui-react';
 function URLGetter({ location, urlObject, error, getURLByURL, replace }) {
     const inputURL = new URLSearchParams(location.search).get('u');
 
+    let fetching = false;
+
     useEffect(() => {
         getURLByURL(inputURL);
+        fetching = true;
     }, [inputURL]);
 
     useEffect(() => {
@@ -18,7 +21,7 @@ function URLGetter({ location, urlObject, error, getURLByURL, replace }) {
     }, [error]);
 
     useEffect(() => {
-        if (urlObject) {
+        if (urlObject && !fetching) {
             replace(`/urls/${urlObject.id}`);
         }
     }, [urlObject]);

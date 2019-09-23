@@ -6,6 +6,7 @@ import {
 } from '../constants/actionTypes';
 
 const initialState = {
+    isQueryReachable: false,
     results: null,
     isLoading: false,
     error: null
@@ -16,6 +17,7 @@ export default function(state = initialState, action) {
         case SEARCH_REQUEST:
             return {
                 ...state,
+                isQueryReachable: false,
                 results: null,
                 error: null,
                 isLoading: true
@@ -23,6 +25,7 @@ export default function(state = initialState, action) {
         case SEARCH_SUCCESS:
             return {
                 ...state,
+                isQueryReachable: action.payload.isQueryReachable,
                 results: action.payload.results,
                 isLoading: false
             };

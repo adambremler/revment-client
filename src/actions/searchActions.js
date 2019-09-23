@@ -16,7 +16,7 @@ export const search = query => async (dispatch, getState) => {
             }
         });
 
-        dispatch(searchSuccess(data.results));
+        dispatch(searchSuccess(data));
     } catch (e) {
         dispatch(
             searchFailure(
@@ -32,9 +32,12 @@ const searchRequest = () => ({
     type: SEARCH_REQUEST
 });
 
-const searchSuccess = results => ({
+const searchSuccess = data => ({
     type: SEARCH_SUCCESS,
-    payload: { results }
+    payload: {
+        results: data.results,
+        isQueryReachable: data.isQueryReachable
+    }
 });
 
 const searchFailure = error => ({
