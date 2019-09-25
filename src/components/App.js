@@ -8,6 +8,8 @@ import SignUp from './Auth/SignUp';
 import LogOut from './LogOut';
 import URLComponent from './URL';
 import URLGetter from './URL/URLGetter';
+import GuestRoute from './common/Routes/GuestRoute';
+import ProtectedRoute from './common/Routes/ProtectedRoute';
 
 export default function App() {
     return (
@@ -16,9 +18,9 @@ export default function App() {
             <Navbar />
             <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/log-in" component={LogIn} />
-                <Route exact path="/sign-up" component={SignUp} />
-                <Route exact path="/log-out" component={LogOut} />
+                <GuestRoute exact path="/log-in" component={LogIn} />
+                <GuestRoute exact path="/sign-up" component={SignUp} />
+                <ProtectedRoute exact path="/log-out" component={LogOut} />
                 <Route exact path="/urls" component={URLGetter} />
                 <Route exact path="/urls/:id" component={URLComponent} />
             </Switch>
