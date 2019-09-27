@@ -6,10 +6,17 @@ import { Search } from 'semantic-ui-react';
 import { search } from '../../actions/searchActions';
 import NavSearchWrapper from './styled/NavSearchWrapper';
 import { push } from 'connected-react-router';
-import NavSearchResultController from './NavSearchResult/NavSearchResultController';
+import ResultController from './NavSearchResult/NavSearchResultController';
 import useConstant from 'use-constant';
 
-function NavSearch({ isQueryReachable, results, isLoading, search, push }) {
+function NavSearch({
+    isQueryReachable,
+    results,
+    isLoading,
+    user,
+    search,
+    push
+}) {
     const [value, setValue] = useState('');
     const searchEl = useRef(null);
 
@@ -32,9 +39,16 @@ function NavSearch({ isQueryReachable, results, isLoading, search, push }) {
 
     const handleResultSelect = (e, { result }) => {
         setValue('');
+
         ReactDOM.findDOMNode(searchEl.current)
             .querySelector('input')
             .blur();
+
+        // If URL is unregistered and user not logged in
+        if (!result.id && !user) {
+            push(`/log-in`);
+            return;
+        }
 
         result.id ? push(`/urls/${result.id}`) : push(`/urls?u=${result.url}`);
     };
@@ -55,7 +69,13 @@ function NavSearch({ isQueryReachable, results, isLoading, search, push }) {
                               !isQueryReachable ||
                               results.urls.some(u => u.exactMatch)
                                   ? []
-                                  : [{ createNewResult: true, url: value }]),
+                                  : [
+                                        {
+                                            createNewResult: true,
+                                            url: value,
+                                            user
+                                        }
+                                    ]),
                               ...results.urls.map(u => ({
                                   ...u,
                                   key: u.id
@@ -63,7 +83,7 @@ function NavSearch({ isQueryReachable, results, isLoading, search, push }) {
                           ]
                         : []
                 }
-                resultRenderer={NavSearchResultController}
+                resultRenderer={ResultController}
                 value={value}
             />
         </NavSearchWrapper>
@@ -73,7 +93,8 @@ function NavSearch({ isQueryReachable, results, isLoading, search, push }) {
 const mapStateToProps = state => ({
     isQueryReachable: state.search.isQueryReachable,
     results: state.search.results,
-    isLoading: state.search.isLoading
+    isLoading: state.search.isLoading,
+    user: state.user.user
 });
 
 const mapDispatchToProps = dispatch => ({

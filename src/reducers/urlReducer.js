@@ -5,6 +5,9 @@ import {
     GET_URL_BY_ID_REQUEST,
     GET_URL_BY_ID_SUCCESS,
     GET_URL_BY_ID_FAILURE,
+    URL_VOTE_REQUEST,
+    URL_VOTE_SUCCESS,
+    LOG_IN_SUCCESS,
     LOG_OUT
 } from '../constants/actionTypes';
 
@@ -78,7 +81,34 @@ export default function(state = initialState, action) {
                     isLoading: false
                 }
             };
+        case URL_VOTE_REQUEST:
+            return {
+                ...state,
+                ...(action.payload.user
+                    ? {
+                          url: {
+                              ...state.url,
+                              points: state.url.voteValue
+                                  ? action.payload.value === state.url.voteValue
+                                      ? state.url.points - action.payload.value
+                                      : state.url.points +
+                                        action.payload.value * 2
+                                  : state.url.points + action.payload.value,
+                              voteValue:
+                                  action.payload.value === state.url.voteValue
+                                      ? 0
+                                      : action.payload.value
+                          }
+                      }
+                    : {})
+            };
+        case URL_VOTE_SUCCESS:
+            return {
+                ...state,
+                url: action.payload.url
+            };
         case LOG_OUT:
+        case LOG_IN_SUCCESS:
             return initialState;
         default:
             return state;

@@ -5,6 +5,7 @@ import signUp from './signUpReducer';
 import logIn from './logInReducer';
 import url from './urlReducer';
 import search from './searchReducer';
+import urlVote from './urlVoteReducer';
 
 const rootReducer = history =>
     combineReducers({
@@ -13,7 +14,8 @@ const rootReducer = history =>
         signUp,
         logIn,
         url,
-        search
+        search,
+        urlVote
     });
 
 export default rootReducer;

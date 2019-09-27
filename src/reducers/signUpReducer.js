@@ -2,6 +2,7 @@ import {
     SIGN_UP_REQUEST,
     SIGN_UP_SUCCESS,
     SIGN_UP_FAILURE,
+    LOG_IN_SUCCESS,
     LOG_OUT
 } from '../constants/actionTypes';
 
@@ -30,6 +31,7 @@ export default function(state = initialState, action) {
                 isLoading: false
             };
         case LOG_OUT:
+        case LOG_IN_SUCCESS:
             return initialState;
         default:
             return state;
