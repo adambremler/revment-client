@@ -7,7 +7,7 @@ import {
 import { push } from 'connected-react-router';
 
 export const vote = (url, value) => async (dispatch, getState) => {
-    dispatch(voteRequest(value));
+    dispatch(voteRequest(value, getState().user.user));
 
     try {
         const { data } = await axios.post(
@@ -22,7 +22,7 @@ export const vote = (url, value) => async (dispatch, getState) => {
             }
         );
 
-        dispatch(voteSuccess(data));
+        dispatch(voteSuccess(data, getState().user.user));
     } catch (e) {
         dispatch(
             voteFailure(e.response ? e.response.data.error : 'Could not vote')
@@ -34,14 +34,14 @@ export const vote = (url, value) => async (dispatch, getState) => {
     }
 };
 
-const voteRequest = value => ({
+const voteRequest = (value, user) => ({
     type: URL_VOTE_REQUEST,
-    payload: { value }
+    payload: { value, user }
 });
 
-const voteSuccess = ({ url }) => ({
+const voteSuccess = ({ url }, user) => ({
     type: URL_VOTE_SUCCESS,
-    payload: { url }
+    payload: { url, user }
 });
 
 const voteFailure = error => ({
