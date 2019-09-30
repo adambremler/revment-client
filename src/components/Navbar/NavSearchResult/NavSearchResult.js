@@ -10,7 +10,9 @@ export default function NavSearchResult({
     url,
     screenshotPath,
     faviconPath,
-    exactMatch
+    exactMatch,
+    points,
+    commentCount
 }) {
     return (
         <Wrapper>
@@ -29,6 +31,12 @@ export default function NavSearchResult({
                         <Icon name="target" /> Exact match
                     </Label>
                 )}
+                <Label size="tiny">
+                    <Icon name="sort" /> {points}
+                </Label>
+                <Label size="tiny">
+                    <Icon name="comment" /> {commentCount}
+                </Label>
             </Header>
             <Image
                 src={`${process.env.REACT_APP_API_URL}${screenshotPath}`}

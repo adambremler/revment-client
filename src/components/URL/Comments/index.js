@@ -1,30 +1,54 @@
-import React from 'react';
-import { Button, Form, Header, CommentGroup } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Button, Form } from 'semantic-ui-react';
+import Wrapper from './styled/CommentsWrapper';
 import Comment from './Comment';
 
-const CommentComponent = () => (
-    <CommentGroup>
-        <Header as="h3" dividing>
-            Comments
-        </Header>
+export default function CommentComponent({
+    url,
+    comments,
+    getComments,
+    postComment,
+    isPostCommentLoading
+}) {
+    const [text, setText] = useState('');
 
-        <Comment author="user" date="2 hours ago" text="Content" />
-        <Comment
-            author="user1"
-            date="An hour ago"
-            text="More comment content"
-        />
+    useEffect(() => {
+        getComments(url.id);
+    }, [url.id]);
 
-        <Form reply>
-            <Form.TextArea />
-            <Button
-                content="Add Reply"
-                labelPosition="left"
-                icon="edit"
-                primary
-            />
-        </Form>
-    </CommentGroup>
-);
+    const handleChange = (e, { value }) => setText(value);
 
-export default CommentComponent;
+    const handleSubmit = e => {
+        e.preventDefault();
+        postComment(url.id, text);
+        setText('');
+    };
+
+    return (
+        <Wrapper>
+            <Form reply onSubmit={handleSubmit}>
+                <Form.TextArea
+                    placeholder="What are your thoughts?"
+                    onChange={handleChange}
+                    value={text}
+                />
+                <Button
+                    loading={isPostCommentLoading}
+                    content="Comment"
+                    labelPosition="right"
+                    icon="edit"
+                    primary
+                />
+            </Form>
+
+            {comments &&
+                comments.map(c => (
+                    <Comment
+                        author={c.user.username}
+                        date={c.registrationDate}
+                        text={c.text}
+                    />
+                ))}
+        </Wrapper>
+    );
+}

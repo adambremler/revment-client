@@ -1,5 +1,6 @@
 import React from 'react';
 import { Comment } from 'semantic-ui-react';
+import moment from 'moment';
 import CommentWrapper from './styled/CommentWrapper';
 import VoteWrapper from './styled/CommentVoteWrapper';
 import VoteArrow from './styled/VoteArrow';
@@ -9,12 +10,12 @@ export default function CommentComponent({ author, date, text }) {
         <CommentWrapper>
             <VoteWrapper>
                 <VoteArrow size="big" name="caret up" fitted />
-                <VoteArrow size="big" name="caret down" fitted />
+                <VoteArrow size="big" name="caret down" fitted down />
             </VoteWrapper>
             <Comment.Content>
                 <Comment.Author as="a">{author}</Comment.Author>
                 <Comment.Metadata>
-                    <div>{date}</div>
+                    <div>{moment(date).fromNow()}</div>
                 </Comment.Metadata>
                 <Comment.Text>{text}</Comment.Text>
                 <Comment.Actions>

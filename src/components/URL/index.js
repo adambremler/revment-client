@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getURLByID } from '../../actions/urlActions';
 import { vote } from '../../actions/urlVoteActions';
+import { getComments, postComment } from '../../actions/commentActions';
 import moment from 'moment';
 import numeral from 'numeral';
 import URLContainer from './styled/URLContainer';
@@ -14,7 +15,16 @@ import VoteWrapper from './styled/URLVoteWrapper';
 import URLCardContentWrapper from './styled/URLCardContentWrapper';
 import URLImageWrapper from './styled/URLImageWrapper';
 
-function URLComponent({ url, getURLByID, match, vote }) {
+function URLComponent({
+    url,
+    comments,
+    match,
+    isPostCommentLoading,
+    getURLByID,
+    vote,
+    getComments,
+    postComment
+}) {
     useEffect(() => {
         if (!url || url.id !== match.params.id) {
             getURLByID(match.params.id);
@@ -39,6 +49,7 @@ function URLComponent({ url, getURLByID, match, vote }) {
                                     {numeral(url.points).format('0.[0]a')}
                                 </span>
                                 <VoteArrow
+                                    down
                                     active={url.voteValue === -1}
                                     size="big"
                                     name="caret down"
@@ -91,7 +102,13 @@ function URLComponent({ url, getURLByID, match, vote }) {
                                 />
                             )}
                         </URLImageWrapper>
-                        <Comments />
+                        <Comments
+                            url={url}
+                            getComments={getComments}
+                            postComment={postComment}
+                            isPostCommentLoading={isPostCommentLoading}
+                            comments={comments}
+                        />
                     </URLCardContentWrapper>
                 </URLCard>
             )}
@@ -100,12 +117,16 @@ function URLComponent({ url, getURLByID, match, vote }) {
 }
 
 const mapStateToProps = state => ({
-    url: state.url.url
+    url: state.url.url,
+    comments: state.urlComments.comments,
+    isPostCommentLoading: state.comment.isLoading
 });
 
 const mapDispatchToProps = dispatch => ({
     getURLByID: id => dispatch(getURLByID(id)),
-    vote: (url, value) => dispatch(vote(url, value))
+    vote: (url, value) => dispatch(vote(url, value)),
+    getComments: url => dispatch(getComments(url)),
+    postComment: (url, text) => dispatch(postComment(url, text))
 });
 
 export default connect(
