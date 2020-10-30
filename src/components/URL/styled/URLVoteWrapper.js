@@ -4,8 +4,8 @@ export default styled.div`
     display: inline-flex;
     flex-direction: column;
     justify-content: start;
-    margin-left: 0.5em;
-    margin-right: 1.5em;
+    margin-left: 0;
+    margin-right: 13px;
 
     span {
         font-weight: bold;

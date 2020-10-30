@@ -1,17 +1,17 @@
 import axios from '../helpers/revmentAxiosInstance';
 import {
-    URL_VOTE_REQUEST,
-    URL_VOTE_SUCCESS,
-    URL_VOTE_FAILURE
+    COMMENT_VOTE_REQUEST,
+    COMMENT_VOTE_SUCCESS,
+    COMMENT_VOTE_FAILURE
 } from '../constants/actionTypes';
 import { push } from 'connected-react-router';
 
-export const vote = (urlID, value) => async (dispatch, getState) => {
-    dispatch(voteRequest(value, getState().user.user));
+export const vote = (urlID, commentID, value) => async (dispatch, getState) => {
+    dispatch(voteRequest(commentID, value, getState().user.user));
 
     try {
         const { data } = await axios.post(
-            `/urls/${urlID}/vote`,
+            `/urls/${urlID}/comments/${commentID}/vote`,
             {
                 value
             },
@@ -34,17 +34,17 @@ export const vote = (urlID, value) => async (dispatch, getState) => {
     }
 };
 
-const voteRequest = (value, user) => ({
-    type: URL_VOTE_REQUEST,
-    payload: { value, user }
+const voteRequest = (commentID, value, user) => ({
+    type: COMMENT_VOTE_REQUEST,
+    payload: { commentID, value, user }
 });
 
-const voteSuccess = ({ url }, user) => ({
-    type: URL_VOTE_SUCCESS,
-    payload: { url, user }
+const voteSuccess = ({ comment }, user) => ({
+    type: COMMENT_VOTE_SUCCESS,
+    payload: { comment, user }
 });
 
 const voteFailure = error => ({
-    type: URL_VOTE_FAILURE,
+    type: COMMENT_VOTE_FAILURE,
     payload: { error }
 });

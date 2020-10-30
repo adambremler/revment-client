@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import sortComments from '../../../helpers/sortComments';
 import { Button, Form } from 'semantic-ui-react';
 import Wrapper from './styled/CommentsWrapper';
 import Comment from './Comment';
+import CommentFormWrapper from './styled/CommentFormWrapper';
 
-export default function CommentComponent({
+export default function CommentsComponent({
     url,
     comments,
     getComments,
     postComment,
-    isPostCommentLoading
+    isPostCommentLoading,
+    voteComment
 }) {
     const [text, setText] = useState('');
 
@@ -26,27 +29,30 @@ export default function CommentComponent({
 
     return (
         <Wrapper>
-            <Form reply onSubmit={handleSubmit}>
-                <Form.TextArea
-                    placeholder="What are your thoughts?"
-                    onChange={handleChange}
-                    value={text}
-                />
-                <Button
-                    loading={isPostCommentLoading}
-                    content="Comment"
-                    labelPosition="right"
-                    icon="edit"
-                    primary
-                />
-            </Form>
+            <CommentFormWrapper>
+                <Form onSubmit={handleSubmit}>
+                    <Form.TextArea
+                        placeholder="What are your thoughts?"
+                        onChange={handleChange}
+                        value={text}
+                    />
+                    <Button
+                        loading={isPostCommentLoading}
+                        content="Comment"
+                        labelPosition="right"
+                        icon="edit"
+                        primary
+                    />
+                </Form>
+            </CommentFormWrapper>
 
             {comments &&
-                comments.map(c => (
+                sortComments(comments).map(c => (
                     <Comment
-                        author={c.user.username}
-                        date={c.registrationDate}
-                        text={c.text}
+                        comment={c}
+                        voteComment={voteComment}
+                        postComment={postComment}
+                        isPostCommentLoading={isPostCommentLoading}
                     />
                 ))}
         </Wrapper>

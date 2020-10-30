@@ -8,14 +8,18 @@ import {
     GET_COMMENTS_FAILURE
 } from '../constants/actionTypes';
 
-export const postComment = (url, text) => async (dispatch, getState) => {
+export const postComment = (urlID, text, parentCommentID = undefined) => async (
+    dispatch,
+    getState
+) => {
     dispatch(postCommentRequest());
 
     try {
         const { data } = await axios.post(
-            `/urls/${url}/comments`,
+            `/urls/${urlID}/comments`,
             {
-                text
+                text,
+                ...(parentCommentID ? { parentCommentID } : {})
             },
             {
                 headers: {
@@ -48,11 +52,11 @@ const postCommentFailure = error => ({
     payload: { error }
 });
 
-export const getComments = url => async (dispatch, getState) => {
+export const getComments = urlID => async (dispatch, getState) => {
     dispatch(getCommentsRequest());
 
     try {
-        const { data } = await axios.get(`/urls/${url}/comments`, {
+        const { data } = await axios.get(`/urls/${urlID}/comments`, {
             headers: {
                 Authorization: `Bearer ${getState().user.token}`
             }

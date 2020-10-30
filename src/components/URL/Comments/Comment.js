@@ -1,26 +1,97 @@
-import React from 'react';
-import { Comment } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import usePrevious from '../../../helpers/usePrevious';
+import { Comment, Icon, Form, Button } from 'semantic-ui-react';
 import moment from 'moment';
 import CommentWrapper from './styled/CommentWrapper';
 import VoteWrapper from './styled/CommentVoteWrapper';
 import VoteArrow from './styled/VoteArrow';
 
-export default function CommentComponent({ author, date, text }) {
+export default function CommentComponent({
+    comment,
+    comment: { user, registrationDate, text, points, voteValue },
+    voteComment,
+    postComment,
+    isPostCommentLoading
+}) {
+    const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
+    const [replyFormText, setReplyFormText] = useState('');
+
+    const handleChange = (e, { value }) => setReplyFormText(value);
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        postComment(comment.url, replyFormText, comment.id);
+
+        setReplyFormText('');
+    };
+
+    const prevIsPostCommentLoading = usePrevious(isPostCommentLoading);
+
+    useEffect(() => {
+        if (prevIsPostCommentLoading && !isPostCommentLoading) {
+            setIsReplyFormOpen(false);
+        }
+    }, [isPostCommentLoading]);
+
     return (
-        <CommentWrapper>
+        <CommentWrapper
+            style={{ marginLeft: 20 * comment.parentCommentsCount + 'px' }}
+        >
             <VoteWrapper>
-                <VoteArrow size="big" name="caret up" fitted />
-                <VoteArrow size="big" name="caret down" fitted down />
+                <VoteArrow
+                    size="big"
+                    name="caret up"
+                    fitted
+                    active={voteValue === 1}
+                    onClick={() => voteComment(comment.url, comment.id, 1)}
+                />
+                <VoteArrow
+                    size="big"
+                    name="caret down"
+                    fitted
+                    down
+                    active={voteValue === -1}
+                    onClick={() => voteComment(comment.url, comment.id, -1)}
+                />
             </VoteWrapper>
             <Comment.Content>
-                <Comment.Author as="a">{author}</Comment.Author>
+                <Comment.Author as="a">{user.username}</Comment.Author>
                 <Comment.Metadata>
-                    <div>{moment(date).fromNow()}</div>
+                    <div>
+                        {points} point{Math.abs(points) !== 1 && 's'}
+                    </div>
+                </Comment.Metadata>
+                <Comment.Metadata>·</Comment.Metadata>
+                <Comment.Metadata>
+                    <div>{moment(registrationDate).fromNow()}</div>
                 </Comment.Metadata>
                 <Comment.Text>{text}</Comment.Text>
                 <Comment.Actions>
-                    <Comment.Action>Reply</Comment.Action>
+                    <Comment.Action
+                        onClick={() => setIsReplyFormOpen(!isReplyFormOpen)}
+                    >
+                        Reply
+                    </Comment.Action>
                 </Comment.Actions>
+                <Form
+                    reply
+                    onSubmit={handleSubmit}
+                    style={isReplyFormOpen ? {} : { display: 'none' }}
+                >
+                    <Form.TextArea
+                        placeholder="What are your thoughts?"
+                        onChange={handleChange}
+                        value={replyFormText}
+                    />
+                    <Button
+                        loading={isPostCommentLoading}
+                        content="Comment"
+                        labelPosition="right"
+                        icon="edit"
+                        primary
+                    />
+                </Form>
             </Comment.Content>
         </CommentWrapper>
     );

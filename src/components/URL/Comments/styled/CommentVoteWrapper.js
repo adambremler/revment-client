@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 export default styled.div`
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     justify-content: start;
-    margin-right: 10px;
+    margin-left: 0;
+    margin-right: 13px;
 `;
