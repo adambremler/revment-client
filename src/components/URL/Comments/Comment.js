@@ -5,6 +5,7 @@ import moment from 'moment';
 import CommentWrapper from './styled/CommentWrapper';
 import VoteWrapper from './styled/CommentVoteWrapper';
 import VoteArrow from './styled/VoteArrow';
+import PostCommentForm from './PostCommentForm';
 
 export default function CommentComponent({
     comment,
@@ -14,17 +15,6 @@ export default function CommentComponent({
     isPostCommentLoading
 }) {
     const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
-    const [replyFormText, setReplyFormText] = useState('');
-
-    const handleChange = (e, { value }) => setReplyFormText(value);
-
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        postComment(comment.url, replyFormText, comment.id);
-
-        setReplyFormText('');
-    };
 
     const prevIsPostCommentLoading = usePrevious(isPostCommentLoading);
 
@@ -74,24 +64,14 @@ export default function CommentComponent({
                         Reply
                     </Comment.Action>
                 </Comment.Actions>
-                <Form
+                <PostCommentForm
+                    urlID={comment.url}
+                    comment={comment}
+                    postComment={postComment}
+                    isPostCommentLoading={isPostCommentLoading}
+                    isVisible={isReplyFormOpen}
                     reply
-                    onSubmit={handleSubmit}
-                    style={isReplyFormOpen ? {} : { display: 'none' }}
-                >
-                    <Form.TextArea
-                        placeholder="What are your thoughts?"
-                        onChange={handleChange}
-                        value={replyFormText}
-                    />
-                    <Button
-                        loading={isPostCommentLoading}
-                        content="Comment"
-                        labelPosition="right"
-                        icon="edit"
-                        primary
-                    />
-                </Form>
+                />
             </Comment.Content>
         </CommentWrapper>
     );

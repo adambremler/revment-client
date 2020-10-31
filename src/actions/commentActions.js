@@ -7,6 +7,7 @@ import {
     GET_COMMENTS_SUCCESS,
     GET_COMMENTS_FAILURE
 } from '../constants/actionTypes';
+import { push } from 'connected-react-router';
 
 export const postComment = (urlID, text, parentCommentID = undefined) => async (
     dispatch,
@@ -35,6 +36,10 @@ export const postComment = (urlID, text, parentCommentID = undefined) => async (
                 e.response ? e.response.data.error : 'Could not post comment'
             )
         );
+
+        if (e.response && e.response.status === 401) {
+            dispatch(push('/log-in'));
+        }
     }
 };
 

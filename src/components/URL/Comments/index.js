@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import sortComments from '../../../helpers/sortComments';
-import { Button, Form } from 'semantic-ui-react';
 import Wrapper from './styled/CommentsWrapper';
 import Comment from './Comment';
 import CommentFormWrapper from './styled/CommentFormWrapper';
+import PostCommentForm from './PostCommentForm';
 
 export default function CommentsComponent({
     url,
@@ -13,37 +13,19 @@ export default function CommentsComponent({
     isPostCommentLoading,
     voteComment
 }) {
-    const [text, setText] = useState('');
-
     useEffect(() => {
         getComments(url.id);
     }, [url.id]);
 
-    const handleChange = (e, { value }) => setText(value);
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        postComment(url.id, text);
-        setText('');
-    };
-
     return (
         <Wrapper>
             <CommentFormWrapper>
-                <Form onSubmit={handleSubmit}>
-                    <Form.TextArea
-                        placeholder="What are your thoughts?"
-                        onChange={handleChange}
-                        value={text}
-                    />
-                    <Button
-                        loading={isPostCommentLoading}
-                        content="Comment"
-                        labelPosition="right"
-                        icon="edit"
-                        primary
-                    />
-                </Form>
+                <PostCommentForm
+                    urlID={url.id}
+                    postComment={postComment}
+                    isPostCommentLoading={isPostCommentLoading}
+                    isVisible={true}
+                />
             </CommentFormWrapper>
 
             {comments &&

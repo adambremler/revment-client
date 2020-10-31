@@ -7,6 +7,7 @@ import {
     GET_URL_BY_ID_FAILURE,
     URL_VOTE_REQUEST,
     URL_VOTE_SUCCESS,
+    POST_COMMENT_SUCCESS,
     LOG_IN_SUCCESS,
     LOG_OUT
 } from '../constants/actionTypes';
@@ -106,6 +107,14 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 url: action.payload.url
+            };
+        case POST_COMMENT_SUCCESS:
+            return {
+                ...state,
+                url: {
+                    ...state.url,
+                    commentCount: state.url.commentCount + 1
+                }
             };
         case LOG_OUT:
         case LOG_IN_SUCCESS:
