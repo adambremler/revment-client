@@ -12,7 +12,7 @@ export const getURLByURL = url => async (dispatch, getState) => {
     dispatch(getURLByURLRequest());
 
     try {
-        const { data } = await axios.get('/urls/', {
+        const { data } = await axios.get('/urls/by-url', {
             params: { url },
             headers: {
                 Authorization: `Bearer ${getState().user.token}`

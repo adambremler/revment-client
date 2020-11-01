@@ -8,6 +8,7 @@ import search from './searchReducer';
 import urlVote from './urlVoteReducer';
 import comment from './commentReducer';
 import urlComments from './urlCommentsReducer';
+import homeURLs from './homeURLs';
 
 const rootReducer = history =>
     combineReducers({
@@ -19,7 +20,8 @@ const rootReducer = history =>
         urlComments,
         urlVote,
         comment,
-        search
+        search,
+        homeURLs
     });
 
 export default rootReducer;

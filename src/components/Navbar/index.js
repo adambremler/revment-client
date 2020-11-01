@@ -41,6 +41,7 @@ function Navbar({ user, pathname, push }) {
                     content="Home"
                     onClick={pushRoute}
                 />
+                {/*
                 <PaddedItem
                     component={Menu.Item}
                     name="/domains"
@@ -48,6 +49,7 @@ function Navbar({ user, pathname, push }) {
                     content="Browse Domains"
                     onClick={pushRoute}
                 />
+                */}
                 <NavSearch />
                 <Menu.Menu position="right">
                     {!user && (
@@ -70,6 +72,7 @@ function Navbar({ user, pathname, push }) {
                     )}
                     {user && (
                         <>
+                            {/*
                             <PaddedItem
                                 component={Menu.Item}
                                 name="/my-comments"
@@ -77,12 +80,14 @@ function Navbar({ user, pathname, push }) {
                                 content="My Comments"
                                 onClick={pushRoute}
                             />
+                            */}
                             <PaddedItem
                                 item
                                 text="Account"
                                 component={Dropdown}
                             >
                                 <Dropdown.Menu>
+                                    {/*
                                     <Dropdown.Item
                                         icon="user"
                                         text="My Profile"
@@ -91,6 +96,7 @@ function Navbar({ user, pathname, push }) {
                                         icon="settings"
                                         text="User Settings"
                                     />
+                                    */}
                                     <Dropdown.Item
                                         icon="sign-out"
                                         text="Log Out"
